@@ -12,11 +12,18 @@ def home():
     return "Hello world"
 
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['GET', 'POST'])
 def predict():
-    cgpa = request.form.get('cgpa')
-    iq = request.form.get('iq')
-    profile_score = request.form.get('profile_score')
+    if request.method == 'POST':
+        # Handling POST request (form data)
+        cgpa = request.form.get('cgpa')
+        iq = request.form.get('iq')
+        profile_score = request.form.get('profile_score')
+    else:
+        # Handling GET request (query parameters)
+        cgpa = request.args.get('cgpa')
+        iq = request.args.get('iq')
+        profile_score = request.args.get('profile_score')
 
     input_query = np.array([[cgpa, iq, profile_score]])
     result = model.predict(input_query)[0]
